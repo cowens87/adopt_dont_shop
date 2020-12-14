@@ -5,6 +5,9 @@ class ApplicationsController < ApplicationController
 
   def show
     @application = Application.find(params[:id])
+      if params[:search]
+        @find_pets = Pet.find_by_name(params[:search])
+      end
   end
 
   def new
@@ -12,19 +15,28 @@ class ApplicationsController < ApplicationController
 
   def create
     application = Application.new(app_params)
-    application.save
-    # require 'pry'; binding.pry
-    redirect_to "/applications/#{application.id}"
-    # if 
-    #   application = pet.applications.create(app_params)
-    #   application[:status] = "In Progress"
-    #   application.save
-    #   redirect_to "/applications/#{application.id}"
-    # else
-    #   flash[:notice] = "Please complete all fields."
-    #   redirect_to "/applications/new"
-    # end
+    if application.save
+      redirect_to application_path(application.id)
+    else 
+      flash[:notice] = "Please Complete All Fields"
+      render :new 
+    end 
   end
+
+  # def update
+  #   application = Application.find(params[:id])
+  #   if params[:pet]
+  #     pet = Pet.find(params[:pet])
+  #     application.pets << pet
+  #   elsif params[:description].empty?
+  #     flash[:notice] = "You must enter a description."
+  #   else
+  #     application[:description] = params[:description]
+  #     application[:status] = "Pending"
+  #     application.update(app_params)
+  #   end
+  #   redirect_to "/applications/#{application.id}"
+  # end
 
   private
 

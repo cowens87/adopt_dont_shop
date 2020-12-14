@@ -4,7 +4,15 @@
 <li> City:     <%= "#{@application.city}"%></li>
 <li> State:    <%= "#{@application.state}"%></li>
 <li> Zip Code: <%= "#{@application.zip}"%></li>
-<li> Why you're a good fit? <%= "#{@application.description}"%></li>
+<li> Why you're a good fit: <%= "#{@application.description}"%></li>
 <h4> Pets Applied For: <%= link_to "#{@application.pet_names}", "/applications/#{@application.id}/pets"%></h4>
 
 
+<%= form_tag(application_path(@application.id), method: :get, name: :search) do %>
+  <h3><%= 'Add a Pet!'%></h3>
+  <%= label_tag :search, 'Search for Pet by Name' %>
+  <%= text_field_tag :search, params[:search] %>
+  <%= submit_tag 'Search' %>
+<% end %>
+
+<%= @find_pets %>

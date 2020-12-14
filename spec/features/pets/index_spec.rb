@@ -80,12 +80,13 @@ RSpec.describe 'Pets index page' do
     fill_in 'City:', with: "#{@ms_sandpaper.city}"
     fill_in 'State:', with: "#{@ms_sandpaper.state}"
     fill_in 'Zip:', with: "#{@ms_sandpaper.zip}"
-    fill_in 'Why youre a good fit?', with: "#{@ms_sandpaper.description}"
+    fill_in 'Why are you a good fit?', with: "#{@ms_sandpaper.description}"
 
     click_on 'Submit'
 
     app_1 = Application.last
 
+    # expect(current_path).to eq("/applications/#{app_1.id}")
     expect(current_path).to eq("/applications/#{app_1.id}")
     expect(@ms_sandpaper.status).to eq('In Progress')
     expect(page).to have_content(@ms_sandpaper.name)

@@ -30,5 +30,23 @@ RSpec.describe 'As a visitor', type: :feature do
       expect(page).to have_link('Thor')
       expect(page).to have_link('Zeus')
     end
+
+    # User story 4 
+    describe 'And that application has not been submitted' do
+      it 'Then I see a section on the page to Add a Pet where I can search for Pets by 
+        name and after under the search bar I see any Pet whose name matches my search' do
+        
+        visit "/applications/#{@ms_jenkins.id}"
+
+        expect(page).to have_content('Add a Pet!')
+        expect(page).to have_content('Search for Pet by Name')
+        
+        fill_in 'Search for Pet by Name', with: "#{@pet1.name}"
+        click_on 'Search'
+
+        expect(current_path).to eq("/applications/#{@ms_jenkins.id}")
+        expect(page).to have_content("#{@pet1.name}")
+      end
+    end
   end
 end
