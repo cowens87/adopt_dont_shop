@@ -5,9 +5,10 @@ class ApplicationsController < ApplicationController
 
   def show
     @application = Application.find(params[:id])
-      if params[:search]
-        @find_pets = Pet.find_by_name(params[:search])
-      end
+    if params[:pet_name]
+      @pets = Pet.find_by_name("#{params[:pet_name]}")
+    end 
+    @pets_incl = @application.pet_names
   end
 
   def new
@@ -18,7 +19,7 @@ class ApplicationsController < ApplicationController
     if application.save
       redirect_to application_path(application.id)
     else 
-      flash[:notice] = "Please Complete All Fields"
+      flash.now[:notice] = "Please Complete All Fields"
       render :new 
     end 
   end

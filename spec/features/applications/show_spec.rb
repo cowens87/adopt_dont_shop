@@ -11,6 +11,8 @@ RSpec.describe 'As a visitor', type: :feature do
       @pet3        = @shelter1.pets.create!(image:"", name: "Zeus", description: "dog", approximate_age: 4, sex: "male")
       @ms_jenkins  = Application.create!({name: 'Buttercup Jenkins', street: "101 Puppy Love Lane", city: 'Aurora', state: 'CO', zip: 80017, 
                                           description: 'I love dogs', status: 'In Progress'})
+      @mr_lemon    = Application.create!({name: 'Luke Lemon', street: "650 Fat Cat Drive", city: 'Denver', state: 'CO', zip: 80203, 
+                                          description: 'Cat Enthusiast', status: 'In Progress'})
     
       ApplicationPet.create!(application: @ms_jenkins, pet: @pet1)
       ApplicationPet.create!(application: @ms_jenkins, pet: @pet3)
@@ -46,6 +48,27 @@ RSpec.describe 'As a visitor', type: :feature do
 
         expect(current_path).to eq("/applications/#{@ms_jenkins.id}")
         expect(page).to have_content("#{@pet1.name}")
+      end
+    end
+
+    # User story 5
+    describe 'I search for a Pet by name, and I see the names Pets that match my search' do 
+      it 'Next to each Pets name I see/click a button to Adopt Pet. I click one of these buttons I am taken to the application 
+          show page and I see the Pet I want to adopt listed on app' do
+        visit "/applications/#{@mr_lemon.id}"
+
+        fill_in 'Search for Pet by Name', with: "#{@pet3.name}"
+        click_on 'Search'
+
+        expect(page).to have_content("#{@pet3.name}")
+        expect("#{@pet3.name}").to appear_before('Adopt Me!')
+        expect(page).to have_button('Adopt Me!')
+
+        click_on 'Adopt Me!'
+        
+        expect(current_path).to eq("/applications/#{@mr_lemon.id}")
+        expect(page).to have_content("#{@pet3.name}")
+        expect(page).to have_content("Pets Applied For: [\"#{@pet3.name}\"]")
       end
     end
   end

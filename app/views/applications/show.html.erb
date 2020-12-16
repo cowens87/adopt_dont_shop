@@ -5,14 +5,28 @@
 <li> State:    <%= "#{@application.state}"%></li>
 <li> Zip Code: <%= "#{@application.zip}"%></li>
 <li> Why you're a good fit: <%= "#{@application.description}"%></li>
-<h4> Pets Applied For: <%= link_to "#{@application.pet_names}", "/applications/#{@application.id}/pets"%></h4>
 
+<h2>Add a Pet!</h2>
+<h4> Pets Applied For: <%= link_to @pets_incl, "/applications/#{@application.id}/pets"%></h4>
+<% if @application.status == "In Progress" %>
+  <section class="find-pet">
+    <%= form_tag "/applications/#{@application.id}", method: :get do %>
+      <%= label_tag :pet_name, "Search for Pet by Name" %>
+      <%= search_field_tag :pet_name %>
+      <%= submit_tag "Search", name: nil %>
+    <% end %>
+  </section>
 
-<%= form_tag(application_path(@application.id), method: :get, name: :search) do %>
-  <h3><%= 'Add a Pet!'%></h3>
-  <%= label_tag :search, 'Search for Pet by Name' %>
-  <%= text_field_tag :search, params[:search] %>
-  <%= submit_tag 'Search' %>
+  <br>
+  <% if !@pets.nil? %>
+  <section class="pet-results">
+    <% @pets.each do |pet| %>
+      <section id="pet-<%= pet.id %>">
+        <p>Pet Name: <%= pet.name %></p>
+        <%= button_to "Adopt Me!", "/application_pets", method: :post, params: {pet_id: pet.id, application_id: @application.id} %>
+        <br>
+      </section>
+   <% end %>
+ </section>
+     <% end %>
 <% end %>
-
-<%= @find_pets %>
