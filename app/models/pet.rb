@@ -11,7 +11,7 @@ class Pet < ApplicationRecord
   has_many :application_pets, dependent: :destroy
   has_many :applications, through: :application_pets
 
-  def self.find_by_name(search)
-    where("lower(name) LIKE ?", "%#{search.downcase}%")
+  def self.find_by_name(pet_name)
+    where(name: pet_name)
   end
 end

@@ -86,7 +86,6 @@ RSpec.describe 'Pets index page' do
 
     app_1 = Application.last
 
-    # expect(current_path).to eq("/applications/#{app_1.id}")
     expect(current_path).to eq("/applications/#{app_1.id}")
     expect(@ms_sandpaper.status).to eq('In Progress')
     expect(page).to have_content(@ms_sandpaper.name)
